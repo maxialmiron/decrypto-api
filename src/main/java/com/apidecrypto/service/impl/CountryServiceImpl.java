@@ -16,6 +16,7 @@ import com.apidecrypto.model.Country;
 import com.apidecrypto.repository.repository.CountryRepository;
 import com.apidecrypto.service.CountryService;
 
+import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 
 /**
@@ -51,9 +52,15 @@ public class CountryServiceImpl implements CountryService {
 	}
 
 	@Override
+	@Transactional
 	public CountryDto save(CountryDto countryDto) {
-		Country CountryEntity = countryRepository.save(this.convertToEntity(countryDto));
-		return this.convertToDto(CountryEntity);
+		
+		if(countryRepository.findByCode(countryDto.getCode()).isPresent()) {
+			throw new EntityExistsException();
+		}
+		
+		Country countryEntity = countryRepository.save(this.convertToEntity(countryDto));
+		return this.convertToDto(countryEntity);
 	}
 
 	@Override

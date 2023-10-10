@@ -2,7 +2,9 @@ package com.apidecrypto.service;
 
 import java.util.List;
 
+import com.apidecrypto.dto.MarketProjection;
 import com.apidecrypto.dto.PrincipalDto;
+import com.apidecrypto.dto.StatsDto;
 import com.apidecrypto.model.Principal;
 
 public interface PrincipalService {
@@ -16,5 +18,7 @@ public interface PrincipalService {
 	PrincipalDto update(long id, PrincipalDto marketDto);
 	
 	void deleteById(long id);
+
+	List<StatsDto> getStats();
 
 }

@@ -15,5 +15,5 @@ public interface MarketRepository extends JpaRepository<Market, Long> {
 	boolean deleteMarketById(Long id);
 	
     List<Market> findByIdIn(List<Integer> ids);
-
+    
 }

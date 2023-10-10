@@ -19,7 +19,6 @@ public class PrincipalDto {
     @NotNull(message = "The description cannot be null")
     private String description;
     
-    @JsonIgnoreProperties("country")
     @NotNull(message = "The markets cannot be null")
     private List<MarketDto> markets = new ArrayList<MarketDto>();
     

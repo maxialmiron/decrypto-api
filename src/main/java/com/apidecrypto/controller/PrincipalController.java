@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.apidecrypto.dto.PrincipalDto;
 import com.apidecrypto.dto.PrincipalRequestDto;
+import com.apidecrypto.dto.StatsDto;
 import com.apidecrypto.service.PrincipalService;
 
 import jakarta.validation.Valid;
@@ -67,5 +68,11 @@ public class PrincipalController {
 	public ResponseEntity<Long> delete(@PathVariable Long id) {
 		principalService.deleteById(id);
 	    return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	@GetMapping("/stats")
+	public ResponseEntity<List<StatsDto>> stats() {
+		List<StatsDto> statsDtoList = principalService.getStats();
+        return ResponseEntity.ok(statsDtoList);
 	}
 }

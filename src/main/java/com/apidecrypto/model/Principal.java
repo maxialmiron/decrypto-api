@@ -1,6 +1,5 @@
 package com.apidecrypto.model;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.Column;
@@ -35,7 +34,7 @@ public class Principal {
         joinColumns = @JoinColumn(name = "principal_id"),
         inverseJoinColumns = @JoinColumn(name = "market_id")
     )
-    private List<Market> market = new ArrayList<Market>();
+    private List<Market> market;
     
     public Principal() {
     }

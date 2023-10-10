@@ -1,6 +1,10 @@
 package com.apidecrypto.service.impl;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -12,7 +16,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.apidecrypto.dto.MarketDto;
+import com.apidecrypto.dto.MarketProjection;
+import com.apidecrypto.dto.MarketStatsDto;
 import com.apidecrypto.dto.PrincipalDto;
+import com.apidecrypto.dto.StatsDto;
 import com.apidecrypto.model.Market;
 import com.apidecrypto.model.Principal;
 import com.apidecrypto.repository.repository.MarketRepository;
@@ -102,6 +109,49 @@ public class PrincipalServiceImpl implements PrincipalService {
 		principal.setMarket(markets);
 		
 		return principal;
+	}
+	
+	@Override
+	public List<StatsDto> getStats() {
+		
+		List<MarketProjection> principalList = principalRepository.countPrincipalsByCountryAndMarket();
+		
+		int totalPrincipals = principalList.stream()
+				  .reduce(0, (ac, user) -> ac + user.getCount(), Integer::sum);
+		
+		Map<String, List<MarketProjection>> principalsPercentageByCountryAndMarket = principalList.stream()
+				.collect(Collectors.groupingBy(MarketProjection::getCountry));	
+		
+		List<StatsDto> statsDtoList = new ArrayList<StatsDto>();
+		
+		mapPercentages(totalPrincipals, principalsPercentageByCountryAndMarket, statsDtoList);
+		
+		return statsDtoList;
+	}
+
+	private void mapPercentages(int totalPrincipals,
+			Map<String, List<MarketProjection>> principalsPercentageByCountryAndMarket, 
+			List<StatsDto> statsDtoList) {
+		
+		principalsPercentageByCountryAndMarket.forEach((name, list) -> {
+			System.out.println("Group: " + name);
+			StatsDto statsDto = new StatsDto();
+			statsDto.setCountry(name);
+			statsDtoList.add(statsDto);
+			List<MarketStatsDto> marketStatsDtoList = new ArrayList<MarketStatsDto>();
+		
+			for (MarketProjection marketProjection : list) {
+				MarketStatsDto marketStatsDto = new MarketStatsDto();
+				marketStatsDto.setName(marketProjection.getMarketCode());
+		
+				float percentage = (float) (marketProjection.getCount() * 100) / totalPrincipals;
+				BigDecimal bd = new BigDecimal(percentage);
+				marketStatsDto.setPercentage(bd.setScale(2, RoundingMode.HALF_EVEN).toString());
+				marketStatsDtoList.add(marketStatsDto);
+			}
+		
+			statsDto.setMarket(marketStatsDtoList);
+		});
 	}
 
 }
