@@ -20,14 +20,13 @@ import lombok.EqualsAndHashCode;
  * @author Maximiliano Almiron
  *
  */
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode
 @Entity
 @Table(uniqueConstraints={@UniqueConstraint(columnNames={"code"})})
 public class Market {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@EqualsAndHashCode.Include()
 	private Integer id;
 	
     @Column(name = "code", unique = true)

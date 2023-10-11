@@ -11,12 +11,14 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.validation.constraints.NotNull;
+import lombok.EqualsAndHashCode;
 
 /**
  * 
  * @author Maximiliano Almiron
  *
  */
+@EqualsAndHashCode
 @Entity
 public class Principal {
 

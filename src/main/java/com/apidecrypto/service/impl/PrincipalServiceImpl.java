@@ -50,6 +50,7 @@ public class PrincipalServiceImpl implements PrincipalService {
 	
 	@Override
 	public PrincipalDto findById(long id) {
+		LOGGER.info("finding by ID:" + id);
 		Principal principal = principalRepository.findById(id)
 				.orElseThrow(() -> new EntityNotFoundException("" + id));
 		return this.convertToDto(principal);
@@ -57,6 +58,7 @@ public class PrincipalServiceImpl implements PrincipalService {
 	
 	@Override
 	public List<PrincipalDto> findAll() {
+		LOGGER.info("finding all instances");
 		List<PrincipalDto> principalDtoList = principalRepository.findAll().stream().map(p -> this.convertToDto(p)).collect(Collectors.toList());
 		return principalDtoList;}
 	
@@ -76,6 +78,8 @@ public class PrincipalServiceImpl implements PrincipalService {
 		BeanUtils.copyProperties(marketDto, market, "id");
 
 		Principal principalEntity = principalRepository.save(market);
+
+		LOGGER.info("Entity update: {}", principalEntity);
 
 		return this.convertToDto(principalEntity);
 	}
@@ -114,6 +118,8 @@ public class PrincipalServiceImpl implements PrincipalService {
 	@Override
 	public List<StatsDto> getStats() {
 		
+		LOGGER.info("Getting Stats:");
+		
 		List<MarketProjection> principalList = principalRepository.countPrincipalsByCountryAndMarket();
 		
 		int totalPrincipals = principalList.stream()
@@ -129,15 +135,23 @@ public class PrincipalServiceImpl implements PrincipalService {
 		return statsDtoList;
 	}
 
+	/**
+	 * 
+	 *  Maps all principals by country, market and its amount
+	 * 
+	 * @param totalPrincipals
+	 * @param principalsPercentageByCountryAndMarket
+	 * @param statsDtoList
+	 */
 	private void mapPercentages(int totalPrincipals,
-			Map<String, List<MarketProjection>> principalsPercentageByCountryAndMarket, 
-			List<StatsDto> statsDtoList) {
+								Map<String, List<MarketProjection>> principalsPercentageByCountryAndMarket, 
+								List<StatsDto> statsDtoList) {
 		
 		principalsPercentageByCountryAndMarket.forEach((name, list) -> {
-			System.out.println("Group: " + name);
 			StatsDto statsDto = new StatsDto();
 			statsDto.setCountry(name);
 			statsDtoList.add(statsDto);
+			
 			List<MarketStatsDto> marketStatsDtoList = new ArrayList<MarketStatsDto>();
 		
 			for (MarketProjection marketProjection : list) {
@@ -147,6 +161,7 @@ public class PrincipalServiceImpl implements PrincipalService {
 				float percentage = (float) (marketProjection.getCount() * 100) / totalPrincipals;
 				BigDecimal bd = new BigDecimal(percentage);
 				marketStatsDto.setPercentage(bd.setScale(2, RoundingMode.HALF_EVEN).toString());
+				
 				marketStatsDtoList.add(marketStatsDto);
 			}
 		
