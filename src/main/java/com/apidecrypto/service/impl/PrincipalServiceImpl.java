@@ -17,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.apidecrypto.dto.MarketDto;
 import com.apidecrypto.dto.MarketProjection;
-import com.apidecrypto.dto.MarketRequestDto;
 import com.apidecrypto.dto.MarketStatsDto;
 import com.apidecrypto.dto.PrincipalDto;
 import com.apidecrypto.dto.PrincipalRequestDto;
