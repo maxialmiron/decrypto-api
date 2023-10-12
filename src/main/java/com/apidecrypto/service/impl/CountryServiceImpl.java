@@ -37,11 +37,11 @@ public class CountryServiceImpl implements CountryService {
 	private ModelMapper modelMapper;
 
 	@Override
-	public CountryDto findById(long id) {
-		Country country = countryRepository.findById(id)
-				.orElseThrow(() -> new EntityNotFoundException("No se encontró el Country con ID: " + id));
+	public CountryDto findByCode(String code) {
+		Country country = countryRepository.findByCode(code)
+				.orElseThrow(() -> new EntityNotFoundException("" + code));
 		
-		LOGGER.info("country was found: {} ", country);
+		LOGGER.info("country found: {} ", country);
 		return this.convertToDto(country);
 	}
 
@@ -52,49 +52,46 @@ public class CountryServiceImpl implements CountryService {
 	}
 
 	@Override
-	@Transactional
 	public CountryDto save(CountryDto countryDto) {
-		
 		if(countryRepository.findByCode(countryDto.getCode()).isPresent()) {
-			throw new EntityExistsException();
+			throw new EntityExistsException(countryDto.getCode());
 		}
 		
 		Country countryEntity = countryRepository.save(this.convertToEntity(countryDto));
+		LOGGER.info("country saved");
 		return this.convertToDto(countryEntity);
 	}
 
 	@Override
-	public CountryDto update(long id, CountryDto countryDto) {
+	public CountryDto update(String code, CountryDto countryDto) {
 
-		Country Country = countryRepository.findById(id)
-				.orElseThrow(() -> new EntityNotFoundException("The Country with ID was not found:" + id));
+		countryRepository.findByCode(code)
+				.orElseThrow(() -> new EntityNotFoundException("" + code));
 
-		BeanUtils.copyProperties(countryDto, Country, "id");
-
-		Country countryEntity = countryRepository.save(Country);
-
+		Country countryEntity = countryRepository.save(this.convertToEntity(countryDto));
+		LOGGER.info("country updated");
 		return this.convertToDto(countryEntity);
 	}
 
 	@Override
-	public void deleteById(long id) {
-		Optional<Country> countryOptional = countryRepository.findById(id);
+	public void deleteByCode(String code) {
+		Optional<Country> countryOptional = countryRepository.findByCode(code);
         if (countryOptional.isPresent()) {
-            countryRepository.deleteById(id);
+            countryRepository.delete(countryOptional.get());
+    		LOGGER.info("country deleted");
         } else {
-            throw new EntityNotFoundException("The Country with ID was not found: " + id);
+            throw new EntityNotFoundException("" + code);
         }
 	}
 
 	private CountryDto convertToDto(Country Country) {
-		CountryDto CountryResponseDto = modelMapper.map(Country, CountryDto.class);
-		return CountryResponseDto;
+		CountryDto countryResponseDto = modelMapper.map(Country, CountryDto.class);
+		return countryResponseDto;
 	}
 
 	private Country convertToEntity(CountryDto countryDto) {
 		Country country = new Country();
-		country.setCode(countryDto.getCode());
-		country.setName(countryDto.getName());
+		BeanUtils.copyProperties(countryDto, country);
 		return country;
 	}
 

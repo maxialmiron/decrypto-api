@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.apidecrypto.dto.MarketDto;
 import com.apidecrypto.dto.MarketRequestDto;
-import com.apidecrypto.model.Market;
 import com.apidecrypto.service.MarketService;
 
 import jakarta.validation.Valid;
@@ -40,8 +39,8 @@ public class MarketController {
 	}
 
 	@GetMapping
-	public ResponseEntity<List<Market>> findAll() {
-		List<Market> marketList = marketService.findAll();
+	public ResponseEntity<List<MarketDto>> findAll() {
+		List<MarketDto> marketList = marketService.findAll();
         return ResponseEntity.ok(marketList);
 	}
 

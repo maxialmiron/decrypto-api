@@ -5,7 +5,6 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.apidecrypto.dto.CountryDto;
-import com.apidecrypto.dto.CountryRequestDto;
 import com.apidecrypto.model.Country;
 import com.apidecrypto.service.CountryService;
 
@@ -33,9 +31,9 @@ public class CountryController {
 	@Autowired
 	private CountryService countryService;
 
-	@GetMapping("/{id}")
-	public ResponseEntity<CountryDto> findById(@PathVariable("id") long id) {
-		CountryDto countryDto = countryService.findById(id);
+	@GetMapping("/{code}")
+	public ResponseEntity<CountryDto> findByCode(@PathVariable("code") String code) {
+		CountryDto countryDto = countryService.findByCode(code);
         return ResponseEntity.ok(countryDto);
 	}
 
@@ -46,20 +44,20 @@ public class CountryController {
 	}
 
 	@PostMapping
-	public ResponseEntity<CountryDto> save(@Valid @RequestBody CountryRequestDto countryRequestDto) {
+	public ResponseEntity<CountryDto> save(@Valid @RequestBody CountryDto countryRequestDto) {
 		CountryDto countryResponseDto = countryService.save(countryRequestDto);
 		return ResponseEntity.ok(countryResponseDto);
 	}
 	
-	@PutMapping("/{id}")
-	public ResponseEntity<CountryDto> update(@PathVariable("id") long id, @Valid @RequestBody CountryRequestDto countryRequestDto) {
-		CountryDto countryResponseDto = countryService.update(id, countryRequestDto);
+	@PutMapping("/{code}")
+	public ResponseEntity<CountryDto> update(@PathVariable("code") String code, @Valid @RequestBody CountryDto countryRequestDto) {
+		CountryDto countryResponseDto = countryService.update(code, countryRequestDto);
         return ResponseEntity.ok(countryResponseDto);
 	}
 	
-	@DeleteMapping(value = "/{id}")
-	public ResponseEntity<Long> delete(@PathVariable Long id) {
-		countryService.deleteById(id);
+	@DeleteMapping(value = "/{code}")
+	public ResponseEntity<?> delete(@PathVariable String code) {
+		countryService.deleteByCode(code);
 	    return new ResponseEntity<>(HttpStatus.OK);
 	}
 }

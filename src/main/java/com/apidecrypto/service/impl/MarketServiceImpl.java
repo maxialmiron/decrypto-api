@@ -1,6 +1,7 @@
 package com.apidecrypto.service.impl;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.apidecrypto.dto.MarketDto;
+import com.apidecrypto.dto.MarketRequestDto;
 import com.apidecrypto.model.Country;
 import com.apidecrypto.model.Market;
 import com.apidecrypto.repository.repository.CountryRepository;
@@ -50,20 +52,21 @@ public class MarketServiceImpl implements MarketService {
 	}
 	
 	@Override
-	public List<Market> findAll() {
+	public List<MarketDto> findAll() {
 		LOGGER.debug("Finding all country instances");
-		return marketRepository.findAll();
+		List<MarketDto> marketDtoList = marketRepository.findAll().stream().map(e -> this.convertToDto(e)).collect(Collectors.toList());
+		return marketDtoList;
 	}
 	
 	@Override
-	public MarketDto save(MarketDto marketDto) {
+	public MarketDto save(MarketRequestDto marketDto) {
 		Market marketEntity = marketRepository.save(this.convertToEntity(marketDto));
 		LOGGER.debug("the market was saved: {}", marketEntity);
 		return this.convertToDto(marketEntity);
 	}
 
 	@Override
-	public MarketDto update(long id, MarketDto marketDto) {
+	public MarketDto update(long id, MarketRequestDto marketDto) {
 
 		Market market = marketRepository.findById(id)
 				.orElseThrow(() -> new EntityNotFoundException("" + id));
@@ -94,8 +97,7 @@ public class MarketServiceImpl implements MarketService {
 
 	private Market convertToEntity(MarketDto marketDto) {
 		Market market = new Market();
-		market.setCode(marketDto.getCode());
-		market.setDescription(marketDto.getDescription());
+		BeanUtils.copyProperties(marketDto, market);
 
 		Country country = countryRepository.findByCode(marketDto.getCountry().getCode()).orElseThrow(
 				() -> new NestedEntityNotFoundException(marketDto.getCountry().getCode()));

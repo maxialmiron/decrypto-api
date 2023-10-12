@@ -1,6 +1,6 @@
 package com.apidecrypto.dto;
 
-import jakarta.persistence.Column;
+
 import jakarta.validation.constraints.NotNull;
 /**
  * 
@@ -9,10 +9,8 @@ import jakarta.validation.constraints.NotNull;
  */
 public class CountryDto {
 	
-    @NotNull(message = "The code cannot be nul")
 	private String code;
 	
-    @Column(name = "name")
     @NotNull(message = "The name cannot be nul")
 	private String name;
 
@@ -39,7 +37,8 @@ public class CountryDto {
     public String toString() {
         return "countryDto{" +
                 "code=" + this.code +
-                ", nombre='" + name + '\'' +
+                ", nombre='" + this.name + '\'' +
                 '}';
     }
+
 }

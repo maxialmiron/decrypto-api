@@ -53,14 +53,14 @@ public class PrincipalController {
 	}
 
 	@PostMapping
-	public ResponseEntity<PrincipalDto> save(@Valid @RequestBody PrincipalRequestDto principalRequestDto) {
-		PrincipalDto principalResponseDto = principalService.save(principalRequestDto);
+	public ResponseEntity<PrincipalDto> save(@Valid @RequestBody PrincipalRequestDto PrincipalDto) {
+		PrincipalDto principalResponseDto = principalService.save(PrincipalDto);
         return ResponseEntity.ok(principalResponseDto);
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<PrincipalDto> update(@PathVariable("id") long id, @Valid @RequestBody PrincipalRequestDto principalRequestDto) {
-		PrincipalDto principalResponseDto = principalService.update(id, principalRequestDto);
+	public ResponseEntity<PrincipalDto> update(@PathVariable("id") long id, @Valid @RequestBody PrincipalRequestDto PrincipalDto) {
+		PrincipalDto principalResponseDto = principalService.update(id, PrincipalDto);
         return ResponseEntity.ok(principalResponseDto);
 	}
 	

@@ -17,8 +17,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.apidecrypto.dto.MarketDto;
 import com.apidecrypto.dto.MarketProjection;
+import com.apidecrypto.dto.MarketRequestDto;
 import com.apidecrypto.dto.MarketStatsDto;
 import com.apidecrypto.dto.PrincipalDto;
+import com.apidecrypto.dto.PrincipalRequestDto;
 import com.apidecrypto.dto.StatsDto;
 import com.apidecrypto.model.Market;
 import com.apidecrypto.model.Principal;
@@ -58,26 +60,26 @@ public class PrincipalServiceImpl implements PrincipalService {
 	
 	@Override
 	public List<PrincipalDto> findAll() {
-		LOGGER.info("finding all instances");
+		LOGGER.info("finding all principal instances");
 		List<PrincipalDto> principalDtoList = principalRepository.findAll().stream().map(p -> this.convertToDto(p)).collect(Collectors.toList());
 		return principalDtoList;}
 	
 	@Override
-	public PrincipalDto save(PrincipalDto principalDto) {
-		Principal principal = principalRepository.save(this.convertToEntity(principalDto));
+	public PrincipalDto save(PrincipalRequestDto principalRequestDto) {
+		Principal principal = principalRepository.save(this.convertToEntity(principalRequestDto));
 		LOGGER.info("Entity saved: {}", principal);
 		return this.convertToDto(principal);
 	}
 
 	@Override
-	public PrincipalDto update(long id, PrincipalDto marketDto) {
+	public PrincipalDto update(long id, PrincipalRequestDto principalRequestDto) {
 
-		Principal market = principalRepository.findById(id)
+		Principal principal = principalRepository.findById(id)
 				.orElseThrow(() -> new EntityNotFoundException("" + id));
 
-		BeanUtils.copyProperties(marketDto, market, "id");
+		BeanUtils.copyProperties(principalRequestDto, principal, "id");
 
-		Principal principalEntity = principalRepository.save(market);
+		Principal principalEntity = principalRepository.save(principal);
 
 		LOGGER.info("Entity update: {}", principalEntity);
 
@@ -90,7 +92,7 @@ public class PrincipalServiceImpl implements PrincipalService {
 	}
 
 	private PrincipalDto convertToDto(Principal principal) {
-		PrincipalDto principalDto = modelMapper.map(principal, PrincipalDto.class);
+		PrincipalDto principalDto = modelMapper.map(principal, PrincipalRequestDto.class);
 		
 		List<MarketDto> list = principal.getMarket().stream().map(p -> this.convertToDto(p)).collect(Collectors.toList());
 
@@ -110,6 +112,12 @@ public class PrincipalServiceImpl implements PrincipalService {
 
 		List<Market> markets = marketRepository.findByIdIn(principalDto.getMarkets().stream().map(p -> p.getId())
 		        .collect(Collectors.toList()));
+		
+		if(principalDto.getMarkets().size() != markets.size()) {
+			LOGGER.error("market was not found");
+			throw new EntityNotFoundException("market was not found");
+		}
+		
 		principal.setMarket(markets);
 		
 		return principal;

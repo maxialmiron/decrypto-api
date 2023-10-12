@@ -2,6 +2,8 @@ package com.apidecrypto.model;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -43,7 +45,6 @@ public class Market {
     private Country country;
     
     @ManyToMany(mappedBy = "market")
-    @NotNull(message = "The market cannot be null")
     private List<Principal> principal;
     
     public Market() {
@@ -81,6 +82,7 @@ public class Market {
 		this.country = country;
 	}
 
+	@JsonManagedReference
 	public List<Principal> getPrincipal() {
 		return principal;
 	}

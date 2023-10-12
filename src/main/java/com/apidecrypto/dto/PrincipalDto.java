@@ -3,7 +3,7 @@ package com.apidecrypto.dto;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.validation.constraints.NotNull;
 
@@ -14,7 +14,7 @@ import jakarta.validation.constraints.NotNull;
  */
 public class PrincipalDto {
 	
-	private Integer id;
+    private Integer id;
 	
     @NotNull(message = "The description cannot be null")
     private String description;
@@ -24,14 +24,6 @@ public class PrincipalDto {
     
     public PrincipalDto() {
     }
-    
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
     
 	public String getDescription() {
 		return description;
@@ -47,6 +39,14 @@ public class PrincipalDto {
 
 	public void setMarkets(List<MarketDto> markets) {
 		this.markets = markets;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 }

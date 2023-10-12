@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.decrypto.exception.NestedEntityNotFoundException;
 
+import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 
 
@@ -42,7 +43,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<String> handleNestedEntityNotFoundException(NestedEntityNotFoundException ex) {
 	    LOGGER.error(ex.getMessage());
-    	return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    	return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Nested Entity with ID was not found: " +  ex.getMessage());
     }
     
     @ExceptionHandler(EntityNotFoundException.class)
@@ -51,6 +52,14 @@ public class GlobalExceptionHandler {
 	    LOGGER.error(ex.getMessage());
     	return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Entity with ID was not found: " + ex.getMessage());
     }
+    
+    @ExceptionHandler(EntityExistsException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<String> handleExistExceptionException(EntityExistsException ex) {
+	    LOGGER.error(ex.getMessage());
+    	return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Entity already exist: " + ex.getMessage());
+    }
+    
     
     @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
