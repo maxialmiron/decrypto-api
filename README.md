@@ -32,7 +32,10 @@ Por lo cual si se intenta asociar un pais diferente a estos se devolvera un erro
 
 Ejemplos JSON para crear las distintas entidades:
 
+URL BASE: http://decrypto-api-env.eba-4zgaxhge.us-east-1.elasticbeanstalk.com
+
 MERCADO:
+/api/market
 Metodo HTTP:POST
 {
   "code": "MAE",
@@ -43,6 +46,7 @@ Metodo HTTP:POST
 }
 
 COMITENTE:
+/api/principal
 Metodo HTTP:POST
 {
   "description": "descripcion de cuenta",
@@ -52,16 +56,16 @@ Metodo HTTP:POST
     }
   ]
 }
+Si se intenta asociar un mercado no existente se devolvera un error.
+Se puede ingresar una lista de mercados.
 
 PAIS:
+/api/country
 Metodo HTTP:POST
 {
   "code": "CODIGO PAIS",
   "name": "nombre pais"
 }
-
-Si se intenta asociar un mercado no existente se devolvera un error.
-Se puede ingresar una lista de mercados.
 
 El endpoint: /api/stats
 Devuelve cifras totalizadoras de distribución de comitentes por país y mercado
