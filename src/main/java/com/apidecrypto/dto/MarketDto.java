@@ -1,7 +1,5 @@
 package com.apidecrypto.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import jakarta.validation.constraints.NotNull;
 /**
  * 
@@ -19,7 +17,6 @@ public class MarketDto {
     private String description;
     
     @NotNull(message = "The name cannot be null")
-    @JsonIgnoreProperties("name")
     private CountryDto country;
     
     public MarketDto() {
@@ -28,23 +25,35 @@ public class MarketDto {
 	public String getCode() {
 		return code;
 	}
+	
 	public void setCode(String code) {
 		this.code = code;
 	}
+	
 	public String getDescription() {
 		return description;
 	}
+	
 	public void setDescription(String description) {
 		this.description = description;
 	}
-
+	
 	public CountryDto getCountry() {
 		return country;
 	}
-
+	
 	public void setCountry(CountryDto country) {
 		this.country = country;
 	}
+
+	@Override
+    public String toString() {
+        return "marketDto{" +
+                "code=" + code +
+                ", description='" + description + '\'' +
+                ", country='" + country + '\'' +
+                '}';
+    }
 
 	public Integer getId() {
 		return id;
@@ -53,14 +62,4 @@ public class MarketDto {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	
-	@Override
-    public String toString() {
-        return "marketDto{" +
-                "id=" + id +
-                ", code='" + code + '\'' +
-                ", description='" + description + '\'' +
-                ", country='" + country + '\'' +
-                '}';
-    }
 }

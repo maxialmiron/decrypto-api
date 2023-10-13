@@ -1,12 +1,13 @@
 package com.apidecrypto.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 /**
  * 
  * @author Maximiliano Almiron
  *
  */
+@JsonIgnoreProperties({"id"})
 public class PrincipalRequestDto extends PrincipalDto {
-	@JsonIgnore
-	private Integer id;
+	
 }

@@ -3,7 +3,7 @@ package com.apidecrypto.service;
 import java.util.List;
 
 import com.apidecrypto.dto.MarketDto;
-import com.apidecrypto.model.Market;
+import com.apidecrypto.dto.MarketRequestDto;
 
 public interface MarketService {
 
@@ -18,14 +18,14 @@ public interface MarketService {
 	 * 
 	 * @return
 	 */
-	List<Market>findAll();
+	List<MarketDto> findAll();
 	
 	/**
 	 * 
 	 * @param market
 	 * @return
 	 */
-	MarketDto save(MarketDto market);
+	MarketDto save(MarketRequestDto market);
 	
 	/**
 	 * 
@@ -33,7 +33,7 @@ public interface MarketService {
 	 * @param marketDto
 	 * @return
 	 */
-	MarketDto update(long id, MarketDto marketDto);
+	MarketDto update(long id, MarketRequestDto marketDto);
 	
 	/**
 	 * 

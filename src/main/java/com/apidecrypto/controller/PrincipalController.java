@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.apidecrypto.dto.PrincipalDto;
 import com.apidecrypto.dto.PrincipalRequestDto;
-import com.apidecrypto.dto.StatsDto;
 import com.apidecrypto.service.PrincipalService;
 
 import jakarta.validation.Valid;
@@ -53,14 +52,14 @@ public class PrincipalController {
 	}
 
 	@PostMapping
-	public ResponseEntity<PrincipalDto> save(@Valid @RequestBody PrincipalRequestDto principalRequestDto) {
-		PrincipalDto principalResponseDto = principalService.save(principalRequestDto);
+	public ResponseEntity<PrincipalDto> save(@Valid @RequestBody PrincipalRequestDto PrincipalDto) {
+		PrincipalDto principalResponseDto = principalService.save(PrincipalDto);
         return ResponseEntity.ok(principalResponseDto);
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<PrincipalDto> update(@PathVariable("id") long id, @Valid @RequestBody PrincipalRequestDto principalRequestDto) {
-		PrincipalDto principalResponseDto = principalService.update(id, principalRequestDto);
+	public ResponseEntity<PrincipalDto> update(@PathVariable("id") long id, @Valid @RequestBody PrincipalRequestDto PrincipalDto) {
+		PrincipalDto principalResponseDto = principalService.update(id, PrincipalDto);
         return ResponseEntity.ok(principalResponseDto);
 	}
 	
@@ -70,9 +69,4 @@ public class PrincipalController {
 	    return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
-	@GetMapping("/stats")
-	public ResponseEntity<List<StatsDto>> stats() {
-		List<StatsDto> statsDtoList = principalService.getStats();
-        return ResponseEntity.ok(statsDtoList);
-	}
 }

@@ -12,7 +12,7 @@ public interface CountryService {
 	 * @param id
 	 * @return countryDto found
 	 */
-	CountryDto findById(long id);
+	CountryDto findByCode(String code);
 	
 	/**
 	 * Retrieves all instances of Country.
@@ -35,12 +35,12 @@ public interface CountryService {
 	 * @param countryDto
 	 * @return countryDto updated
 	 */
-	CountryDto update(long id, CountryDto countryDto);
+	CountryDto update(String code, CountryDto countryDto);
 	
 	/**
 	 * 
 	 * @param id
 	 */
-	void deleteById(long id);
+	void deleteByCode(String code);
 
 }
