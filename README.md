@@ -53,6 +53,13 @@ Metodo HTTP:POST
   ]
 }
 
+PAIS:
+Metodo HTTP:POST
+{
+  "code": "CODIGO PAIS",
+  "name": "nombre pais"
+}
+
 Si se intenta asociar un mercado no existente se devolvera un error.
 Se puede ingresar una lista de mercados.
 
